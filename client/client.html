@@ -5,6 +5,28 @@
   <link rel="stylesheet" type="text/css" href="/style.css">
   
   <script>
+    //finish this!
+    //making the html element stuff to display based on response.
+    function handleResponse(response) {
+
+    }
+
+    //finish this!
+    //fetch the data from the server.
+    function sendFetch(page, type){
+
+    }
+
+    function init() {
+      const sendButton = document.querySelector("#send");
+      const pageSelect = document.querySelector('#page');
+      const typeSelect = document.querySelector('#type');
+
+      sendButton.addEventListener('click', (e) => {
+        e.preventDefault(); //don't think i need this bc it's not a form but it's chill
+        sendFetch(pageSelect.innerText, typeSelect.innerText) 
+      })
+    }
 
   </script>
 </head>

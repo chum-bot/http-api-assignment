@@ -1,0 +1,22 @@
+{
+  "name": "http-api-assignment",
+  "version": "1.0.0",
+  "main": "./src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chum-bot/http-api-assignment.git"
+  },
+  "author": "Zach Etienne",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/chum-bot/http-api-assignment/issues"
+  },
+  "homepage": "https://github.com/chum-bot/http-api-assignment#readme",
+  "description": "",
+  "devDependencies": {
+    "eslint": "^9.39.2"
+  }
+}
