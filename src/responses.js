@@ -16,6 +16,10 @@ function getIndex(request, response) {
     respond(request, response, 200, index, 'text/html');
     respond(request, response, 200, css, 'text/css');
 }
+function getSuccess(request, response) {
+    const type = request.headers.accept;
+    respond(request, response, 200)
+}
 
 module.exports = {
     getIndex,

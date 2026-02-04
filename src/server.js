@@ -10,7 +10,12 @@ const urlStruct = {
 function onRequest(request, response) {
     const protocol = request.connection.encrypted ? 'https' : 'http';
     const parsedUrl = new URL(request.url, `${protocol}://${request.headers.host}`);
+    if(request.headers.accept) {
+        request.acceptedTypes = request.headers.accept.split(',');
+    }
     
+    request.query = Object.fromEntries(parsedUrl.searchParams);
+
     //handler
     const handler = urlStruct[parsedUrl.pathname];
     if (handler) handler(request, response);

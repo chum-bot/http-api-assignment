@@ -8,13 +8,30 @@
     //finish this!
     //making the html element stuff to display based on response.
     function handleResponse(response) {
+      response.text().then(resText => {
+        //this'll have our info in it
+        const content = document.querySelector("#content");
+
+        const errorNameHolder = document.createElement('h1');
+        const errorMessageHolder = document.createElement('p');
+
+        const contentType = response.headers.get("Content-Type");
+      })
 
     }
 
     //finish this!
     //fetch the data from the server.
-    function sendFetch(page, type){
+    async function sendFetch(url, type) {
+      //the query param i think is entered manually
+      //so i don't need to add that here myself, it'd already be there
+      let response = await fetch(url, {
+        headers: {
+          "Accept": type
+        }
+      })
 
+      handleResponse(response);
     }
 
     function init() {
@@ -23,8 +40,10 @@
       const typeSelect = document.querySelector('#type');
 
       sendButton.addEventListener('click', (e) => {
-        e.preventDefault(); //don't think i need this bc it's not a form but it's chill
-        sendFetch(pageSelect.innerText, typeSelect.innerText) 
+        e.preventDefault();
+        console.log(pageSelect.value);
+        sendFetch(pageSelect.value, typeSelect.value) 
+        //unsure if the select html will let me extend to the option but surely it does right
       })
     }
 

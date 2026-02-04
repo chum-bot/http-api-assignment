@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "./src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pretest": "eslint ./src --fix",
+    "test": "echo \"Tests complete\"",
+    "start": "node ./src/server.js"
   },
   "repository": {
     "type": "git",
