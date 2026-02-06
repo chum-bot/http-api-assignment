@@ -1,10 +1,12 @@
 const http = require('http')
-const respHandler = require('./responses.js')
+const respHandler = require('./jsonResponses.js')
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 const urlStruct = {
     index: respHandler.getIndex,
+    '/style.css': respHandler.getCSS,
+    '/success': respHandler.getSuccess
 };
 
 function onRequest(request, response) {
@@ -16,7 +18,7 @@ function onRequest(request, response) {
     
     request.query = Object.fromEntries(parsedUrl.searchParams);
 
-    //handler
+    //handler for urls
     const handler = urlStruct[parsedUrl.pathname];
     if (handler) handler(request, response);
     else urlStruct.index(request, response);

@@ -7,18 +7,51 @@
   <script>
     //finish this!
     //making the html element stuff to display based on response.
-    function handleResponse(response) {
-      response.text().then(resText => {
+    async function handleResponse(response) {
         //this'll have our info in it
         const content = document.querySelector("#content");
 
-        const errorNameHolder = document.createElement('h1');
-        const errorMessageHolder = document.createElement('p');
+        const statNameHolder = document.createElement('h1');
+        const statMessageHolder = document.createElement('p');
 
         const contentType = response.headers.get("Content-Type");
-      })
 
-    }
+      //go through and manually enter the generic status code messages
+      switch (response.status){
+        case 200: 
+          statNameHolder.innerHTML = '<b>Success</b>';
+          break;
+        case 400: 
+          statNameHolder.innerText = '<b>Bad Request</b>';
+          break;
+        case 401: 
+          statNameHolder.innerText = '<b>Unauthorized</b>';
+          break;
+        case 403: 
+          statNameHolder.innerText = '<b>Forbidden</b>';
+          break;
+        case 404: 
+          statNameHolder.innerText = '<b>Not Found</b>';
+          break;
+        case 500: 
+          statNameHolder.innerText = '<b>Internal Server Error</b>';
+          break;
+        case 501: 
+          statNameHolder.innerText = '<b>Not Implemented</b>';
+          break;
+        default: 
+          statNameHolder.innerHTML = "<b>Error Code Not Implemented By Client</b>"
+      } 
+      //set the message
+      const respObj = await response.json();
+      console.log(respObj)
+      if(respObj.message) {
+        statMessageHolder.innerText = respObj.message;
+      }
+      content.appendChild(statNameHolder);
+      content.appendChild(statMessageHolder);
+      }
+    
 
     //finish this!
     //fetch the data from the server.
@@ -41,11 +74,10 @@
 
       sendButton.addEventListener('click', (e) => {
         e.preventDefault();
-        console.log(pageSelect.value);
         sendFetch(pageSelect.value, typeSelect.value) 
-        //unsure if the select html will let me extend to the option but surely it does right
       })
     }
+    window.onload = init;
 
   </script>
 </head>
