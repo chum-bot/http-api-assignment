@@ -42,17 +42,17 @@ function getCSS(request, response) {
     respond(request, response, 200, css, 'text/css');
 }
 function getOther(request, response) {
-    const type = request.acceptedTypes ? request.acceptedTypes[0] : 'application/json';
+    const type = request.acceptedTypes.includes('text/xml') ? request.acceptedTypes[0] : 'application/json';
     const message = buildResponse("The page you were looking for was not found.", type, "notFound");
     respond(request, response, 404, message, type)
 }
 function getSuccess(request, response) {
-    const type = request.acceptedTypes ? request.acceptedTypes[0] : 'application/json';
+    const type = request.acceptedTypes.includes('text/xml') ? request.acceptedTypes[0] : 'application/json';
     const message = buildResponse("This is a successful response", type);
     respond(request, response, 200, message, type)
 }
 async function getBadRequest(request, response) {
-    const type = request.acceptedTypes ? request.acceptedTypes[0] : 'application/json';
+    const type = request.acceptedTypes.includes('text/xml') ? request.acceptedTypes[0] : 'application/json';
     await request.query;
 
     if(!request.query || request.query.valid !== "true"){
@@ -65,8 +65,15 @@ async function getBadRequest(request, response) {
     }
 }
 async function getUnauthorized(request, response) {
-    const type = request.acceptedTypes ? request.acceptedTypes[0] : 'application/json';
+    const type = request.acceptedTypes.includes('text/xml') ? request.acceptedTypes[0] : 'application/json';
     await request.query;
+    //this felt weird to do but
+    //this in conjunction with the client.html query stuff
+    //allows the user to type in the unauthorized/bad request queries at the top of the page
+    //and it would actually send the success messages on the main page
+    //i don't think this was part of the assignment, nor do i think it would be practical in an irl application
+    //(because who types queries in manually)
+    //but hey i guess i can do that now
 
     if(!request.query || request.query.loggedIn !== 'yes'){
         const message = buildResponse("Missing loggedIn query parameter set to yes", type, 'unauthorized');
@@ -78,17 +85,17 @@ async function getUnauthorized(request, response) {
     }
 }
 function getForbidden(request, response) {
-    const type = request.acceptedTypes ? request.acceptedTypes[0] : 'application/json';
+    const type = request.acceptedTypes.includes('text/xml') ? request.acceptedTypes[0] : 'application/json';
     const message = buildResponse("You do not have access to this content.", type, 'forbidden');
     respond(request, response, 403, message, type)
 }
 function getInternal(request, response) {
-    const type = request.acceptedTypes ? request.acceptedTypes[0] : 'application/json';
-    const message = buildResponse("Internal Server Error. Something went wrong.", type);
+    const type = request.acceptedTypes.includes('text/xml') ? request.acceptedTypes[0] : 'application/json';
+    const message = buildResponse("Internal Server Error. Something went wrong.", type, 'internalError');
     respond(request, response, 500, message, type)
 }
 function getNotImplemented(request, response) {
-    const type = request.acceptedTypes ? request.acceptedTypes[0] : 'application/json';
+    const type = request.acceptedTypes.includes('text/xml') ? request.acceptedTypes[0] : 'application/json';
     const message = buildResponse("A get request for this page has not been implemented yet. Check again later for updated content.", type, 'notImplemented');
     respond(request, response, 501, message, type)
 }

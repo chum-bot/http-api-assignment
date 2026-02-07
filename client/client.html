@@ -57,11 +57,18 @@
       }
     }
 
-    async function sendFetch(url, type) {
+    async function sendFetch(url, type) { 
+      //so after finishing the assignment 
+      //i only just noticed that the example intentionally excludes the query parameter on the main page
+      //i thought they had to be able to type it at the top of the page
+      //these few lines allow you to do that, it would be able to read those
+      //after being stuck on getting this to work for so long i think i understand why they were intentionally left out
+      //continued in responses.js
       const query = document.URL.substr(document.URL.indexOf('?'))
       if(document.URL.includes('?')) {
         url += query;
       }
+
       let response = await fetch(url, {
         method: "GET",
         headers: {
