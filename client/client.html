@@ -8,13 +8,11 @@
     //finish this!
     //making the html element stuff to display based on response.
     async function handleResponse(response) {
-        //this'll have our info in it
-        const content = document.querySelector("#content");
-
-        const statNameHolder = document.createElement('h1');
-        const statMessageHolder = document.createElement('p');
-
-        const contentType = response.headers.get("Content-Type");
+      //this'll have our info in it
+      const content = document.querySelector("#content");
+      const statNameHolder = document.querySelector('#status-name');
+      const statMessageHolder = document.querySelector('#status-message');
+      const contentType = response.headers.get("Content-Type");
 
       //go through and manually enter the generic status code messages
       switch (response.status){
@@ -22,48 +20,54 @@
           statNameHolder.innerHTML = '<b>Success</b>';
           break;
         case 400: 
-          statNameHolder.innerText = '<b>Bad Request</b>';
+          statNameHolder.innerHTML = '<b>Bad Request</b>';
           break;
         case 401: 
-          statNameHolder.innerText = '<b>Unauthorized</b>';
+          statNameHolder.innerHTML = '<b>Unauthorized</b>';
           break;
         case 403: 
-          statNameHolder.innerText = '<b>Forbidden</b>';
+          statNameHolder.innerHTML = '<b>Forbidden</b>';
           break;
         case 404: 
-          statNameHolder.innerText = '<b>Not Found</b>';
+          statNameHolder.innerHTML = '<b>Not Found</b>';
           break;
         case 500: 
-          statNameHolder.innerText = '<b>Internal Server Error</b>';
+          statNameHolder.innerHTML = '<b>Internal Server Error</b>';
           break;
         case 501: 
-          statNameHolder.innerText = '<b>Not Implemented</b>';
+          statNameHolder.innerHTML = '<b>Not Implemented</b>';
           break;
         default: 
           statNameHolder.innerHTML = "<b>Error Code Not Implemented By Client</b>"
-      } 
-      //set the message
-      const respObj = await response.json();
-      console.log(respObj)
-      if(respObj.message) {
-        statMessageHolder.innerText = respObj.message;
       }
-      content.appendChild(statNameHolder);
-      content.appendChild(statMessageHolder);
-      }
-    
 
-    //finish this!
-    //fetch the data from the server.
+      if(contentType === "application/json"){
+        //set the message
+        const respJSON = await response.json();
+        console.log(respJSON);
+        if(respJSON.message) {
+          statMessageHolder.innerText = respJSON.message;
+        }
+      }
+      else if (contentType === "text/xml"){
+        const respXML = await response.text()
+        console.log(respXML);
+        let parsedXML = new window.DOMParser().parseFromString(respXML, 'text/xml');
+        statMessageHolder.innerText = parsedXML.querySelector('message').textContent;
+      }
+    }
+
     async function sendFetch(url, type) {
-      //the query param i think is entered manually
-      //so i don't need to add that here myself, it'd already be there
+      const query = document.URL.substr(document.URL.indexOf('?'))
+      if(document.URL.includes('?')) {
+        url += query;
+      }
       let response = await fetch(url, {
+        method: "GET",
         headers: {
           "Accept": type
         }
       })
-
       handleResponse(response);
     }
 
@@ -72,10 +76,7 @@
       const pageSelect = document.querySelector('#page');
       const typeSelect = document.querySelector('#type');
 
-      sendButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        sendFetch(pageSelect.value, typeSelect.value) 
-      })
+      sendButton.addEventListener('click', (e) => {sendFetch(pageSelect.value, typeSelect.value)})
     }
     window.onload = init;
 
@@ -94,12 +95,14 @@
       <option value="/notFound">Not Found</option>
     </select>
     <select id="type">
-      <option value="application/json">JSON</option>
+      <option value="application/json" selected>JSON</option>
       <option value="text/xml">XML</option>
     </select>
     <button id="send">Send</button>
   </section>
   <section id="content">
+    <h1 id="status-name"></h1>
+    <p id="status-message"></p>
   </section>
 </body>
 </html>
